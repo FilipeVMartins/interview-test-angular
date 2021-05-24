@@ -23,6 +23,7 @@ export class ScheduleAPIService implements InMemoryDbService {
   post(reqInfo: RequestInfo) {
     const collectionName = reqInfo.collectionName;
     console.log('post::', collectionName);
+    //console.log('post::', reqInfo);
 
     if (collectionName === 'schedules') {
       return this.createSchedule(reqInfo);

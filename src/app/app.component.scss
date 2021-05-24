@@ -1,128 +1,3 @@
-/* .page-header {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  height: 53px;
-  min-width: 320px;
-  background: #fff;
-}
-
-.navbar.navbar-default {
-    left: 0;
-    top: 0;
-    position: fixed;
-    width: 100%;
-    z-index: 998;
-}
-
-.navbar {
-  background-color: #fff;
-  height: 53px;
-  border: 0;
-  border-bottom: 1px solid #dbe1e8;
-  position: relative;
-  min-height: 50px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-}
-
-.navbar-default {
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
-}
-
-.navbar-profiles {
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  height: 100%;
-}
-
-.navbar-nav {
-  float: left;
-  margin: 0;
-}
-
-.navbar-nav {
-  margin: 7.5px -15px;
-}
-
-.nav {
-  padding-left: 0;
-  margin-bottom: 0;
-  list-style: none;
-}
-
-.navbar-profiles-item-wrap {
-  display: flex;
-}
-
-.navbar-profiles-item, .navbar-profiles .profile-thumbnail {
-  margin-right: 5px;
-  cursor: pointer;
-}
-figure {
-  margin: 0;
-}
-figure {
-  margin: 1em 40px;
-}
-article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
-  display: block;
-}
-*, :after, :before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-figure {
-  display: block;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 40px;
-  margin-inline-end: 40px;
-}
-
-.profile-thumbnail-avatar.small {
-  width: 29px;
-  height: 29px;
-}
-.profile-thumbnail-avatar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 25px;
-  width: 25px;
-  margin: auto;
-  border-radius: 50%;
-  position: relative;
-}
-.small, small {
-  font-size: 85%;
-}
-
-.profile-thumbnail-avatar.small>img {
-  width: 29px;
-  height: 29px;
-}
-.profile-thumbnail-avatar>img {
-  width: 64px;
-  height: 64px;
-  border: 1px solid #d2d0d0;
-  border-radius: 50%;
-}
-img {
-  vertical-align: middle;
-}
-img {
-  border: 0;
-}
-*/
-
-
-
-
-
 
 .main-page {
   padding: 1rem;
@@ -138,6 +13,7 @@ img {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
+  margin-bottom: 0px !important;
 }
 
 /* available profiles */
@@ -196,28 +72,10 @@ img {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .main-page-content {
   display: flex;
   flex-direction: column;
-  margin-top: 10%;
+  margin-top: 3rem;
 }
 
 
@@ -261,19 +119,9 @@ img {
 
 
 
-
-
-
-
-
-
 .schedules-history {
-  margin-top: 100px;
+  margin-top: 3rem;
 }
-
-
-
-
 
 
 

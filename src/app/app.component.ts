@@ -47,6 +47,7 @@ export class AppComponent implements OnInit {
         end_date: scheduleResponse.end_date,
       };
       this.schedules = scheduleResponse.data;
+      console.log(this.schedules)
     });
   }
 
@@ -71,7 +72,7 @@ export class AppComponent implements OnInit {
           };
           this.schedules = scheduleResponse.data;
           //
-          console.log(this.schedules)
+          //console.log(scheduleResponse)
         });
       });
   }
