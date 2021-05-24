@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import {
   NgxFileDropEntry,
   FileSystemFileEntry,
@@ -13,25 +13,28 @@ import {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  Object = Object;
   public files: NgxFileDropEntry[] = [];
   public channels: any = [];
   public schedules: any = [];
   public schedulePeriod = null;
-  public selectedChannel = null;
   public displayedColumns = ['type', 'status', 'image', 'channel', 'date'];
-  private form: FormGroup;
+
+  public selectedChannel = null;
+  
+  public form: FormGroup;
 
   public constructor(private http: HttpClient) {
     this.form = new FormBuilder().group({
-      channel: null,
-      image: null,
-      date: [new Date()],
-      type: null,
+      channel: new FormControl(null, Validators.compose([Validators.required])),
+      image: new FormControl(null, Validators.compose([Validators.required])),
+      date: new FormControl(null, Validators.compose([Validators.required])),
+      type: new FormControl('feed', Validators.compose([Validators.required]))
     });
   }
 
   public ngOnInit() {
-    this.form.patchValue({ type: 'feed' });
+    //this.form.patchValue({ type: 'feed' });
     this.http.get('api/channels').subscribe((channels) => {
       this.selectedChannel = channels[0];
       this.channels = channels;
@@ -52,12 +55,14 @@ export class AppComponent implements OnInit {
     this.form.patchValue({ channel });
   }
 
-  public schedule() {
+  public schedule($event) {
+    $event.preventDefault();
     if (!this.form.valid) return; // TODO: give feedback
     this.http
       .post('api/schedules', this.form.value, { responseType: 'json' })
       .subscribe((data) => {
-        this.form.reset();
+        //this.form.reset();, since the UI state keeps itself, the only data that need to be reseted are inputed date and image.
+        this.form.patchValue({ image: null, date: [new Date()] });
         this.files = [];
         this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
           this.schedulePeriod = {
@@ -65,6 +70,8 @@ export class AppComponent implements OnInit {
             end_date: scheduleResponse.end_date,
           };
           this.schedules = scheduleResponse.data;
+          //
+          console.log(this.schedules)
         });
       });
   }
@@ -92,7 +99,16 @@ export class AppComponent implements OnInit {
     console.log(event);
   }
 
-  public changeTab($event) {
-    this.form.patchValue({ type: $event.index === 0 ? 'feed' : 'story' });
+  public changeType($event) {
+
+    //console.log($event.target.value)
+    
+    //this.form.patchValue({ type: $event.index === 0 ? 'feed' : 'story' });
+    this.form.patchValue({ type: $event.target.value });
+    //console.log(this.form.controls['type'].value);
+  }
+
+  public changeDate($event){
+    this.form.patchValue({ date: $event.target.value });
   }
 }

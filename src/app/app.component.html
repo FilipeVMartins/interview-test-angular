@@ -1,9 +1,25 @@
-<div fxLayout="column" fxLayoutGap="40px">
-  <header class="page-header" fxFlex="100px" fxLayout="row">
-    <section fxFlex="20%">
-      <div>
+<div class="main-page" fxLayout="column" fxLayoutGap="40px">
+  
+  <header class="page-header">
+
+
+    <nav class="navbar-profiles">
+      <div class="profile" *ngFor="let channel of channels" (click)="selectChannel(channel)">
+        <figure class="profile-thumbnail" [ngStyle]="{'background-color': channel.user.username === selectedChannel?.user.username ? 'darkgray' : 'transparent' }" >
+          <div class="profile-thumbnail-avatar">
+            <img src="{{ channel.user.profile_pic_url }}" />
+          </div>
+        </figure>
+      </div>
+    </nav>
+
+
+
+
+
+    <section class="selected-profile">
         <figure class="profile-thumbnail">
-          <img src="{{ selectedChannel?.user.profile_pic_url }}" width="85px" />
+          <img src="{{ selectedChannel?.user.profile_pic_url }}" />
           <figcaption class="profile-thumbnail-label">
             <div class="fa-label-content">
               <div>{{ selectedChannel?.user.username }}</div>
@@ -15,146 +31,114 @@
               </div>
               <div
                 class="profile-details__business-info ng-binding ng-hide"
-                *ngIf="selectedChannel?.user.is_business"
+                *ngIf="selectedChannel?.user.is_business; else elseBlock"
               >
                 Business Profile
               </div>
+              <ng-template #elseBlock >&nbsp;</ng-template>
             </div>
           </figcaption>
         </figure>
-      </div>
     </section>
 
-    <nav class="nav navbar-nav navbar-profiles" fxFlex>
-      <div class="navbar-profiles-item-wrap">
-        <a *ngFor="let channel of channels" (click)="selectChannel(channel)">
-          <figure class="profile-thumbnail">
-            <div class="profile-thumbnail-avatar">
-              <img src="{{ channel.user.profile_pic_url }}" />
-            </div>
-          </figure>
-        </a>
-      </div>
-    </nav>
+    
   </header>
 
-  <div fxFlex fxLayout="row">
-    <section fxFlex="500px">
-      <div>
-        Agendamentos de {{ schedulePeriod?.start_date | date }} até
-        {{ schedulePeriod?.end_date | date }}
+  <div class="main-page-content">
+
+
+    
+
+
+    <section class="scheduler">
+      <button mat-button (click)="schedule($event)">Agendar</button>
+      <div class="file-drop">
+
+        <div class="schedule-type-wrapper">
+          <label>Tipo do Agendamento: &nbsp;</label>
+          <div class="schedule-type-button-group">
+            <button value="feed" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='feed')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'feed' ? 'darkgray' : 'transparent' }" >Novo Post</button>
+            <button value="story" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='story')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'story' ? 'darkgray' : 'transparent' }">Novo Story</button>
+          </div>
+        </div>
+
+        <div class="schedule-date-wrapper">
+          <label for="inputDate" >Data do Agendamento: &nbsp;</label>
+          <input type="date" (change)="changeDate($event)" name="inputDate" id="inputDate">
+        </div>
+
+        <div>
+          <ngx-file-drop
+            dropZoneLabel="Drop files here"
+            (onFileDrop)="dropped($event)"
+            (onFileOver)="fileOver($event)"
+            (onFileLeave)="fileLeave($event)"
+            dropZoneClassName="input-file-drop-zone"
+            contentClassName="input-file-content"
+          >
+            <ng-template
+              ngx-file-drop-content-tmp
+              let-openFileSelector="openFileSelector">
+              Imagem: &nbsp;
+              <button type="button" (click)="openFileSelector()" class="input-file-button">
+                Selecionar Arquivos
+              </button>
+            </ng-template>
+          </ngx-file-drop>
+
+
+          
+
+          <div class="upload-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Arquivos Selecionados:</th>
+                </tr>
+              </thead>
+              <tbody class="upload-name-style">
+                <tr *ngFor="let item of files; let i = index">
+                  <td>
+                    <strong>{{ item.relativePath }}</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+          
       </div>
-      <table mat-table [dataSource]="schedules" class="mat-elevation-z8">
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Target</th>
-          <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>status</th>
-          <td mat-cell *matCellDef="let element">{{ element.status }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="image">
-          <th mat-header-cell *matHeaderCellDef>image</th>
-          <td mat-cell *matCellDef="let element">
-            <img src="{{ element.image.url }}" width="40px" />
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="channel">
-          <th mat-header-cell *matHeaderCellDef>channel</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.channel.username }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>date</th>
-          <td mat-cell *matCellDef="let element">{{ element.date | date }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
     </section>
 
-    <section fxFlex>
-      <button mat-button (click)="schedule()">Agendar</button>
-      <mat-tab-group (selectedTabChange)="changeTab($event)">
-        <mat-tab label="Novo post">
-          <div class="center">
-            <ngx-file-drop
-              dropZoneLabel="Drop files here"
-              (onFileDrop)="dropped($event)"
-              (onFileOver)="fileOver($event)"
-              (onFileLeave)="fileLeave($event)"
-            >
-              <ng-template
-                ngx-file-drop-content-tmp
-                let-openFileSelector="openFileSelector"
-              >
-                Imagem
-                <button type="button" (click)="openFileSelector()">
-                  Browse Files
-                </button>
-              </ng-template>
-            </ngx-file-drop>
-            <div class="upload-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                  </tr>
-                </thead>
-                <tbody class="upload-name-style">
-                  <tr *ngFor="let item of files; let i = index">
-                    <td>
-                      <strong>{{ item.relativePath }}</strong>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </mat-tab>
-        <mat-tab label="Novo Story">
-          <div class="center">
-            <ngx-file-drop
-              dropZoneLabel="Drop files here"
-              (onFileDrop)="dropped($event)"
-              (onFileOver)="fileOver($event)"
-              (onFileLeave)="fileLeave($event)"
-            >
-              <ng-template
-                ngx-file-drop-content-tmp
-                let-openFileSelector="openFileSelector"
-              >
-                Imagem
-                <button type="button" (click)="openFileSelector()">
-                  Browse Files
-                </button>
-              </ng-template>
-            </ngx-file-drop>
-            <div class="upload-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                  </tr>
-                </thead>
-                <tbody class="upload-name-style">
-                  <tr *ngFor="let item of files; let i = index">
-                    <td>
-                      <strong>{{ item.relativePath }}</strong>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+
+
+
+
+    <section class="schedules-history">
+      <div class="schedules-period" >
+        <p>Agendamentos de <strong>{{ schedulePeriod?.start_date | date: 'dd-MM-yyyy' }}</strong> até
+          <strong>{{ schedulePeriod?.end_date | date: 'dd-MM-yyyy' }}</strong></p>
+      </div>
+      
+      <div class="table">
+        <div class="tr thead">
+          <div class="td" *ngFor="let column of displayedColumns" >{{column}}</div>
+        </div>
+
+        <div class="tr tbody" *ngFor="let row of schedules" >
+          <div class="td"><p> {{row.type}}</p></div>
+          <div class="td"><p> {{row.status}}</p></div>
+          <div class="td"><img src="{{ row.image.url }}" width="40px" /></div>
+          <div class="td"><p> {{row.channel.username}}</p></div>
+          <div class="td"><p> {{row.date | date: 'dd-MM-yyyy'}}</p></div>
+        </div>
+      </div>
     </section>
+
+
+
+
+
   </div>
 </div>

@@ -1,4 +1,4 @@
-.page-header {
+/* .page-header {
   border: 0;
   margin: 0;
   padding: 0;
@@ -42,9 +42,11 @@
   float: left;
   margin: 0;
 }
+
 .navbar-nav {
   margin: 7.5px -15px;
 }
+
 .nav {
   padding-left: 0;
   margin-bottom: 0;
@@ -54,7 +56,6 @@
 .navbar-profiles-item-wrap {
   display: flex;
 }
-
 
 .navbar-profiles-item, .navbar-profiles .profile-thumbnail {
   margin-right: 5px;
@@ -116,3 +117,217 @@ img {
 img {
   border: 0;
 }
+*/
+
+
+
+
+
+
+.main-page {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
+  box-shadow: rgb(0 0 0 / 20%) 0px 10px 16px 0px, rgb(0 0 0 / 19%) 0px 6px 20px 0px;
+  --darkreader-inline-boxshadow: rgba(0, 0, 0, 0.2) 0px 10px 16px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
+}
+
+.main-page .page-header {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+/* available profiles */
+.main-page .navbar-profiles {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  
+  overflow: auto !important ;
+  background-color: #d3d3d3;
+}
+
+.main-page .navbar-profiles .profile {
+  width: auto;
+}
+
+.main-page .navbar-profiles .profile-thumbnail {
+  margin: 1rem 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+}
+
+.main-page .navbar-profiles .profile-thumbnail:hover {
+  border: 1px solid black;
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+}
+
+.main-page .navbar-profiles .profile-thumbnail-avatar {
+  width: 4rem;
+  height: 4rem;
+}
+
+.main-page .navbar-profiles .profile-thumbnail-avatar img {
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+}
+
+/* selected profile*/
+.main-page .selected-profile {
+  width: 200px;
+  padding: 2rem;
+  background-color: #d3d3d3;
+  border-radius: 1rem;
+  margin-top: 1rem;
+}
+
+.main-page .selected-profile .profile-thumbnail {
+  margin: 0px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.main-page-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10%;
+}
+
+
+
+.schedule-type-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin: 0.5rem 0rem;
+}
+
+.main-page .main-page-content .schedule-type-button-group {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 8px;
+
+}
+
+.main-page .main-page-content .schedule-type-button {
+  border: none;
+  cursor: pointer;
+  border-radius: 0.1rem;
+  padding: 0.3rem;
+  transition: all 200ms ease-out;
+}
+
+.main-page .main-page-content .schedule-type-button-hover:hover {
+  background-color: #d3d3d3 !important;
+}
+
+.main-page .main-page-content .schedule-date-wrapper {
+  margin: 0.5rem 0rem;
+}
+
+.main-page .main-page-content .schedule-date-wrapper input {
+  cursor: pointer;
+  border-radius: 0.4rem;
+  padding: 0.3rem;
+}
+
+
+
+
+
+
+
+
+
+.schedules-history {
+  margin-top: 100px;
+}
+
+
+
+
+
+
+
+.table {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  background-color: #d3d3d3;
+  border: 1px solid black;
+  width: 100%;
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+  padding: 0.5rem;
+}
+
+.table .tr {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+
+.table .tr:last-child {
+  border-bottom: none;
+}
+
+.table .td {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 1px solid #d3d3d3;
+}
+
+.table .td:nth-child(1) {
+  width: 15%;
+}
+.table .td:nth-child(2) {
+  width: 15%;
+}
+.table .td:nth-child(3) {
+  width: 15%;
+}
+.table .td:nth-child(4) {
+  width: 35%;
+}
+.table .td:nth-child(5) {
+  width: 20%;
+}
+
+
+

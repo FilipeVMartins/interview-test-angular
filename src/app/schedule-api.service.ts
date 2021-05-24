@@ -68,7 +68,7 @@ export const scheduleFactory = (data) => ({
     filename: data.image.name,
     is_album: false,
     url:
-      'https://media.postgrain.com/uploads/images/2021/03/30/46519/9dbfcf76d9e30edbae8faef13f2ac700236ae25e.jpg',
+      `https://picsum.photos/id/${Math.floor(Math.random() * 400)}/160/200`,
     type: null,
   },
   channel: {

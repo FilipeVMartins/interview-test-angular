@@ -1,4 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { cursor: default; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+// gx-file-drop element style classes
+.main-page .input-file-drop-zone {
+    border: 2px dotted black;
+    border-radius: 0px;
+    height: 5rem;
+    margin: auto;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgb(0 0 0 / 20%) 0px 10px 16px 0px, rgb(0 0 0 / 19%) 0px 6px 20px 0px;
+    --darkreader-inline-boxshadow: rgba(0, 0, 0, 0.2) 0px 10px 16px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
+}
+
+.main-page .input-file-content {
+    align-items: center;
+    color: black;
+    display: flex;
+    justify-content: center;
+}
+
+.main-page .input-file-button {
+    appearance: auto;
+    cursor: pointer;
+}
+  
