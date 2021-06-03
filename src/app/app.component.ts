@@ -6,6 +6,7 @@ import {
   FileSystemFileEntry,
   FileSystemDirectoryEntry,
 } from 'ngx-file-drop';
+import { ChannelsService } from './channels.service';
 
 @Component({
   selector: 'app-root',
@@ -15,31 +16,33 @@ import {
 export class AppComponent implements OnInit {
   Object = Object;
   public files: NgxFileDropEntry[] = [];
-  public channels: any = [];
+  //public channels: any = [];
   public schedules: any = [];
   public schedulePeriod = null;
   public displayedColumns = ['type', 'status', 'image', 'channel', 'date'];
 
-  public selectedChannel = null;
+  //public selectedChannel = null;
   
   public form: FormGroup;
 
-  public constructor(private http: HttpClient) {
+  public constructor(private http: HttpClient, private channels: ChannelsService) {
     this.form = new FormBuilder().group({
-      channel: new FormControl(null, Validators.compose([Validators.required])),
+      channel: new FormControl(this.channels.selectedChannel, Validators.compose([Validators.required])),
       image: new FormControl(null, Validators.compose([Validators.required])),
       date: new FormControl(null, Validators.compose([Validators.required])),
       type: new FormControl('feed', Validators.compose([Validators.required]))
     });
-  }
+  };
 
   public ngOnInit() {
     //this.form.patchValue({ type: 'feed' });
-    this.http.get('api/channels').subscribe((channels) => {
-      this.selectedChannel = channels[0];
-      this.channels = channels;
-      this.form.patchValue({ channel: channels[0] });
-    });
+    // this.http.get('api/channels').subscribe((channels) => {
+    //   this.selectedChannel = channels[0];
+    //   this.channels = channels;
+    //   this.form.patchValue({ channel: channels[0] });
+    // });
+
+    
 
     this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
       this.schedulePeriod = {
@@ -52,8 +55,8 @@ export class AppComponent implements OnInit {
   }
 
   public selectChannel(channel) {
-    this.selectedChannel = channel;
-    this.form.patchValue({ channel });
+    this.channels.setSelectedChannel(channel);
+    //this.form.patchValue({ channel });
   }
 
   public schedule($event) {

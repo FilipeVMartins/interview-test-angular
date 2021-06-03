@@ -14,6 +14,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 
+import { ChannelsService } from './channels.service';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -29,7 +31,7 @@ import { MatTableModule } from '@angular/material/table';
     MatListModule,
     MatTableModule,
   ],
-  providers: [],
+  providers: [ChannelsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
