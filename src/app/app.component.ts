@@ -26,13 +26,15 @@ export class AppComponent implements OnInit {
 
   //public selectedChannel = null;
   //public dataTeste: Observable<any>;
-  public dataTeste: Subject<any> = new Subject<any>();
+
+  // public dataTeste: any = [];
+  // public asdasd: any = 'dddd';
 
   public form: FormGroup;
 
   public constructor(private http: HttpClient, public channels: ChannelsService) {
     this.form = new FormGroup({
-      channel: new FormControl(this.channels.selectedChannel, Validators.compose([Validators.required])),
+      channel: new FormControl(null, Validators.compose([Validators.required])),
       image: new FormControl(null, Validators.compose([Validators.required])),
       date: new FormControl(null, Validators.compose([Validators.required])),
       type: new FormControl('feed', Validators.compose([Validators.required]))
@@ -40,6 +42,12 @@ export class AppComponent implements OnInit {
 
   };
   
+  //debug
+  public log(val) { console.log(val); }
+
+  public trackItem (index: number, item: any) {
+    return item.trackId;
+  }
 
   public ngOnInit() {
     //this.form.patchValue({ type: 'feed' });
@@ -53,11 +61,19 @@ export class AppComponent implements OnInit {
     //console.log(this.channels.channels)
 
     
-    this.channels.channelsObs.subscribe((channels) => {
-      console.log(channels);
-      //this.dataTeste = channels;
-      this.dataTeste.next(channels);
-      console.log(this.dataTeste);
+    // this.channels.channelsObs.subscribe((channels) => {
+    //   console.log(channels);
+    //   this.dataTeste = channels;
+      
+    //   console.log(this.dataTeste);
+
+    // })
+
+
+    // subscribe to keep form channel value always updated with the service selectedChannel
+    this.channels.selectedChannelObs.subscribe((channel) => {
+      //console.log(channel);
+      this.form.patchValue({ channel: channel });
     })
 
 
@@ -79,10 +95,10 @@ export class AppComponent implements OnInit {
     });
   }
 
-  public selectChannel(channel) {
-    this.channels.setSelectedChannel(channel);
-    //this.form.patchValue({ channel });
-  }
+  // public selectChannel(channel) {
+  //   this.channels.setSelectedChannel(channel);
+  //   //this.form.patchValue({ channel });
+  // }
 
   public schedule() {
     if (!this.form.valid) return; // TODO: give feedback

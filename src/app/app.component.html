@@ -3,10 +3,12 @@
   <header class="page-header">
     <!-- {{JSON.stringify(channels.channels[0])}} -->
 
-    <div class="" *ngFor="let channel of dataTeste | async" ><div>debugg</div></div>
+    <!-- {{log(dataTeste)}} -->
+
+    <!-- <div *ngFor="let channell of channels.channels | async" ><div>{{channell.id}} </div></div> -->
 
     <nav class="navbar-profiles">
-      <div class="profile" *ngFor="let channel of channels.channels | async" (click)="selectChannel(channel)">
+      <div class="profile" *ngFor="let channel of channels.channels | async" (click)="channels.setSelectedChannel(channel)">
         
         <figure class="profile-thumbnail" [ngStyle]="{'background-color': channel.user.username === this.form.controls['channel'].value.user.username ? 'darkgray' : 'transparent' }" >
           <div class="profile-thumbnail-avatar">
@@ -17,10 +19,7 @@
     </nav>
 
 
-
-
-
-    <section class="selected-profile">
+    <section class="selected-profile" *ngIf="this.form.controls['channel'].value">
         <figure class="profile-thumbnail">
           <img src="{{ this.form.controls['channel'].value.user.profile_pic_url }}" />
           <figcaption class="profile-thumbnail-label">
