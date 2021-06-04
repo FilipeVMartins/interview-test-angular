@@ -1,11 +1,14 @@
 <div class="main-page" fxLayout="column" fxLayoutGap="40px">
-  
+<form [formGroup]="form" (ngSubmit)="onSubmit($event)">
   <header class="page-header">
+    <!-- {{JSON.stringify(channels.channels[0])}} -->
 
+    <div class="" *ngFor="let channel of dataTeste | async" ><div>debugg</div></div>
 
     <nav class="navbar-profiles">
-      <div class="profile" *ngFor="let channel of channels" (click)="selectChannel(channel)">
-        <figure class="profile-thumbnail" [ngStyle]="{'background-color': channel.user.username === selectedChannel?.user.username ? 'darkgray' : 'transparent' }" >
+      <div class="profile" *ngFor="let channel of channels.channels | async" (click)="selectChannel(channel)">
+        
+        <figure class="profile-thumbnail" [ngStyle]="{'background-color': channel.user.username === this.form.controls['channel'].value.user.username ? 'darkgray' : 'transparent' }" >
           <div class="profile-thumbnail-avatar">
             <img src="{{ channel.user.profile_pic_url }}" />
           </div>
@@ -19,19 +22,19 @@
 
     <section class="selected-profile">
         <figure class="profile-thumbnail">
-          <img src="{{ selectedChannel?.user.profile_pic_url }}" />
+          <img src="{{ this.form.controls['channel'].value.user.profile_pic_url }}" />
           <figcaption class="profile-thumbnail-label">
             <div class="fa-label-content">
-              <div>{{ selectedChannel?.user.username }}</div>
+              <div>{{ this.form.controls['channel'].value.user.username }}</div>
             </div>
             <div class="profile-details">
               <div class="profile-details__influencer-level ng-binding">
-                {{ selectedChannel?.user.follower_count }} Followers |
-                {{ selectedChannel?.user.following_count }} Following
+                {{ this.form.controls['channel'].value.user.follower_count }} Followers |
+                {{ this.form.controls['channel'].value.user.following_count }} Following
               </div>
               <div
                 class="profile-details__business-info ng-binding ng-hide"
-                *ngIf="selectedChannel?.user.is_business; else elseBlock"
+                *ngIf="this.form.controls['channel'].value.user.is_business; else elseBlock"
               >
                 Business Profile
               </div>
@@ -51,7 +54,7 @@
 
 
     <section class="scheduler">
-      <button mat-button (click)="schedule($event)">Agendar</button>
+      <button mat-button (click)="onSubmit($event)">Agendar</button>
       <div class="file-drop">
 
         <div class="schedule-type-wrapper">
@@ -141,4 +144,5 @@
 
 
   </div>
+</form>
 </div>

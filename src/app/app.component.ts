@@ -1,4 +1,5 @@
 import { HttpClient } from '@angular/common/http';
+import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { Form, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import {
@@ -6,33 +7,39 @@ import {
   FileSystemFileEntry,
   FileSystemDirectoryEntry,
 } from 'ngx-file-drop';
+import { Subject, Observable } from 'rxjs';
 import { ChannelsService } from './channels.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   Object = Object;
+  JSON = JSON;
   public files: NgxFileDropEntry[] = [];
-  //public channels: any = [];
+  public availableChannels: any = [];
   public schedules: any = [];
   public schedulePeriod = null;
   public displayedColumns = ['type', 'status', 'image', 'channel', 'date'];
 
   //public selectedChannel = null;
-  
+  //public dataTeste: Observable<any>;
+  public dataTeste: Subject<any> = new Subject<any>();
+
   public form: FormGroup;
 
-  public constructor(private http: HttpClient, private channels: ChannelsService) {
-    this.form = new FormBuilder().group({
+  public constructor(private http: HttpClient, public channels: ChannelsService) {
+    this.form = new FormGroup({
       channel: new FormControl(this.channels.selectedChannel, Validators.compose([Validators.required])),
       image: new FormControl(null, Validators.compose([Validators.required])),
       date: new FormControl(null, Validators.compose([Validators.required])),
       type: new FormControl('feed', Validators.compose([Validators.required]))
     });
+
   };
+  
 
   public ngOnInit() {
     //this.form.patchValue({ type: 'feed' });
@@ -42,6 +49,24 @@ export class AppComponent implements OnInit {
     //   this.form.patchValue({ channel: channels[0] });
     // });
 
+
+    //console.log(this.channels.channels)
+
+    
+    this.channels.channelsObs.subscribe((channels) => {
+      console.log(channels);
+      //this.dataTeste = channels;
+      this.dataTeste.next(channels);
+      console.log(this.dataTeste);
+    })
+
+
+    
+
+
+
+
+    
     
 
     this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
@@ -50,7 +75,7 @@ export class AppComponent implements OnInit {
         end_date: scheduleResponse.end_date,
       };
       this.schedules = scheduleResponse.data;
-      console.log(this.schedules)
+      //console.log(this.schedules)
     });
   }
 
@@ -59,8 +84,7 @@ export class AppComponent implements OnInit {
     //this.form.patchValue({ channel });
   }
 
-  public schedule($event) {
-    $event.preventDefault();
+  public schedule() {
     if (!this.form.valid) return; // TODO: give feedback
     this.http
       .post('api/schedules', this.form.value, { responseType: 'json' })
@@ -78,6 +102,12 @@ export class AppComponent implements OnInit {
           //console.log(scheduleResponse)
         });
       });
+  };
+
+  public onSubmit ($event){
+    $event.preventDefault();
+
+    this.schedule();
   }
 
   public dropped(files: NgxFileDropEntry[]) {

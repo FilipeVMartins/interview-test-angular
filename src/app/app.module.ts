@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms'; // ngModel
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // ngModel
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxFileDropModule } from 'ngx-file-drop';
@@ -14,6 +14,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 
+
+
 import { ChannelsService } from './channels.service';
 
 @NgModule({
@@ -21,11 +23,14 @@ import { ChannelsService } from './channels.service';
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     NgxFileDropModule,
     HttpClientInMemoryWebApiModule.forRoot(ScheduleAPIService, { delay: 500 }),
     BrowserAnimationsModule,
     FlexLayoutModule,
+
+    
 
     MatTabsModule,
     MatListModule,
