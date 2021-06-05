@@ -121,9 +121,11 @@
 
 
     <section class="schedules-history">
-      <div class="schedules-period" >
-        <p>Agendamentos de <strong>{{ schedules?.schedulePeriod.start_date | date: 'dd-MM-yyyy' }}</strong> até
-          <strong>{{ schedules?.schedulePeriod.end_date | date: 'dd-MM-yyyy' }}</strong></p>
+      <div class="schedules-period" *ngIf="schedules.schedulePeriod | async; let _schedulePeriod" >
+        <p>Agendamentos de 
+          <strong>{{ _schedulePeriod.start_date | date: 'dd-MM-yyyy' }}</strong> até
+          <strong>{{ _schedulePeriod.end_date | date: 'dd-MM-yyyy' }}</strong>
+        </p>
       </div>
       
       <div class="table">

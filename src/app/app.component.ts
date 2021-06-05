@@ -80,6 +80,11 @@ export class AppComponent implements OnInit {
       this.form.patchValue({ channel: channel });
     })
 
+    this.schedules.schedulePeriodObs.subscribe((schedules) => {
+      console.log(schedules);
+    })
+
+
 
     
 

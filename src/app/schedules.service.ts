@@ -42,7 +42,6 @@ export class SchedulesService {
   // send a post request to create a Schedule
   public httpMakeSchedule(formValue) {
     this.http.post('api/schedules', formValue, { responseType: 'json' }).subscribe((data) => {
-
       // update Schedules
       this.httpGetSchedules();
     });
