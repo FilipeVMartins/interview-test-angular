@@ -59,8 +59,8 @@
         <div class="schedule-type-wrapper">
           <label>Tipo do Agendamento: &nbsp;</label>
           <div class="schedule-type-button-group">
-            <button value="feed" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='feed')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'feed' ? 'darkgray' : 'transparent' }" >Novo Post</button>
-            <button value="story" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='story')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'story' ? 'darkgray' : 'transparent' }">Novo Story</button>
+            <button type="button" value="feed" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='feed')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'feed' ? 'darkgray' : 'transparent' }" >Novo Post</button>
+            <button type="button" value="story" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='story')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'story' ? 'darkgray' : 'transparent' }">Novo Story</button>
           </div>
         </div>
 
@@ -68,6 +68,8 @@
           <label for="inputDate" >Data do Agendamento: &nbsp;</label>
           <input type="date" (change)="changeDate($event)" name="inputDate" id="inputDate">
         </div>
+
+
 
         <div>
           <ngx-file-drop
@@ -83,25 +85,28 @@
               let-openFileSelector="openFileSelector">
               Imagem: &nbsp;
               <button type="button" (click)="openFileSelector()" class="input-file-button">
-                Selecionar Arquivos
+                Selecionar Arquivo
               </button>
             </ng-template>
           </ngx-file-drop>
-
-
-          
 
           <div class="upload-table">
             <table class="table">
               <thead>
                 <tr>
-                  <th>Arquivos Selecionados:</th>
+                  <th>Arquivo Selecionado:</th>
                 </tr>
               </thead>
               <tbody class="upload-name-style">
-                <tr *ngFor="let item of files; let i = index">
+                <tr *ngIf="this.form.controls['image'].value">
                   <td>
-                    <strong>{{ item.relativePath }}</strong>
+                    <strong>{{this.form.controls['image'].value?.name}}</strong>
+                    <img [src]="this.form.controls['imageUrl']?.value" alt="Imagem para o novo Post/Story">
+                  </td>
+                </tr>
+                <tr *ngIf="!this.form.controls['image'].value" >
+                  <td>
+                    <strong>Nenhum arquivo selecionado!</strong>
                   </td>
                 </tr>
               </tbody>
@@ -115,12 +120,10 @@
 
 
 
-
-
     <section class="schedules-history">
       <div class="schedules-period" >
-        <p>Agendamentos de <strong>{{ schedulePeriod?.start_date | date: 'dd-MM-yyyy' }}</strong> até
-          <strong>{{ schedulePeriod?.end_date | date: 'dd-MM-yyyy' }}</strong></p>
+        <p>Agendamentos de <strong>{{ schedules?.schedulePeriod.start_date | date: 'dd-MM-yyyy' }}</strong> até
+          <strong>{{ schedules?.schedulePeriod.end_date | date: 'dd-MM-yyyy' }}</strong></p>
       </div>
       
       <div class="table">
@@ -128,10 +131,10 @@
           <div class="td" *ngFor="let column of displayedColumns" >{{column}}</div>
         </div>
 
-        <div class="tr tbody" *ngFor="let row of schedules" >
+        <div class="tr tbody" *ngFor="let row of schedules.schedules | async" >
           <div class="td"><p> {{row.type}}</p></div>
           <div class="td"><p> {{row.status}}</p></div>
-          <div class="td"><img src="{{ row.image.url }}" width="40px" /></div>
+          <div class="td"><img src="{{ row.image.url }}" /></div>
           <div class="td"><p> {{row.channel.username}}</p></div>
           <div class="td"><p> {{row.date | date: 'dd-MM-yyyy'}}</p></div>
         </div>

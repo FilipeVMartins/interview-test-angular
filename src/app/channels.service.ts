@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
 import { Subject } from 'rxjs';
 
 @Injectable({
@@ -11,16 +10,16 @@ export class ChannelsService {
   //public channels: any = [];
   //public selectedChannel = null;
 
-  public channels: Subject<any> = new Subject<any>();    // consider putting the actual type of the data you will receive
+  public channels: Subject<any> = new Subject<any>();
   public channelsObs = this.channels.asObservable();
 
-  public selectedChannel: Subject<any> = new Subject<any>();    // consider putting the actual type of the data you will receive
+  public selectedChannel: Subject<any> = new Subject<any>();
   public selectedChannelObs = this.selectedChannel.asObservable();
 
   
 
   constructor(private http: HttpClient) {
-    // get data from api
+    // get initial data from api
     this.httpGetChannels();
    };
 

@@ -9,6 +9,7 @@ import {
 } from 'ngx-file-drop';
 import { Subject, Observable } from 'rxjs';
 import { ChannelsService } from './channels.service';
+import { SchedulesService } from './schedules.service';
 
 @Component({
   selector: 'app-root',
@@ -18,10 +19,12 @@ import { ChannelsService } from './channels.service';
 export class AppComponent implements OnInit {
   Object = Object;
   JSON = JSON;
-  public files: NgxFileDropEntry[] = [];
-  public availableChannels: any = [];
-  public schedules: any = [];
-  public schedulePeriod = null;
+  //public files: NgxFileDropEntry[] = [];
+  
+  //public imageUrl: string | ArrayBuffer;
+
+  ///public schedules: any = [];
+  ///public schedulePeriod = null;
   public displayedColumns = ['type', 'status', 'image', 'channel', 'date'];
 
   //public selectedChannel = null;
@@ -32,10 +35,11 @@ export class AppComponent implements OnInit {
 
   public form: FormGroup;
 
-  public constructor(private http: HttpClient, public channels: ChannelsService) {
+  public constructor(private http: HttpClient, public channels: ChannelsService, public schedules: SchedulesService) {
     this.form = new FormGroup({
       channel: new FormControl(null, Validators.compose([Validators.required])),
       image: new FormControl(null, Validators.compose([Validators.required])),
+      imageUrl: new FormControl(null, Validators.compose([Validators.required])),
       date: new FormControl(null, Validators.compose([Validators.required])),
       type: new FormControl('feed', Validators.compose([Validators.required]))
     });
@@ -85,14 +89,14 @@ export class AppComponent implements OnInit {
     
     
 
-    this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
-      this.schedulePeriod = {
-        start_date: scheduleResponse.start_date,
-        end_date: scheduleResponse.end_date,
-      };
-      this.schedules = scheduleResponse.data;
-      //console.log(this.schedules)
-    });
+    // this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
+    //   this.schedulePeriod = {
+    //     start_date: scheduleResponse.start_date,
+    //     end_date: scheduleResponse.end_date,
+    //   };
+    //   this.schedules = scheduleResponse.data;
+    //   //console.log(this.schedules)
+    // });
   }
 
   // public selectChannel(channel) {
@@ -102,44 +106,77 @@ export class AppComponent implements OnInit {
 
   public schedule() {
     if (!this.form.valid) return; // TODO: give feedback
-    this.http
-      .post('api/schedules', this.form.value, { responseType: 'json' })
-      .subscribe((data) => {
-        //this.form.reset();, since the UI state keeps itself, the only data that need to be reseted are inputed date and image.
-        this.form.patchValue({ image: null, date: [new Date()] });
-        this.files = [];
-        this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
-          this.schedulePeriod = {
-            start_date: scheduleResponse.start_date,
-            end_date: scheduleResponse.end_date,
-          };
-          this.schedules = scheduleResponse.data;
-          //
-          //console.log(scheduleResponse)
-        });
-      });
+
+    console.log('aa')
+    // send post request
+    this.schedules.httpMakeSchedule(this.form.value)
+
+    // this.http.post('api/schedules', this.form.value, { responseType: 'json' }).subscribe((data) => {
+    //     //this.form.reset();, since the UI state keeps itself, the only data that need to be reseted are inputed date and image.
+    //     //this.form.patchValue({ image: null, date: [new Date()] });
+    //     //this.files = [];
+    //     this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
+    //       this.schedulePeriod = {
+    //         start_date: scheduleResponse.start_date,
+    //         end_date: scheduleResponse.end_date,
+    //       };
+    //       this.schedules = scheduleResponse.data;
+    //       //
+    //       //console.log(scheduleResponse)
+    //     });
+    //   });
   };
 
   public onSubmit ($event){
     $event.preventDefault();
 
     this.schedule();
-  }
+  };
 
   public dropped(files: NgxFileDropEntry[]) {
-    this.files = files;
-    for (const droppedFile of files) {
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
+    //this.files = files;
+
+    //for (const droppedFile of files) {
+    if (files[0].fileEntry.isFile) {
+      const fileEntry = files[0].fileEntry as FileSystemFileEntry;
+      fileEntry.file((file: File) => {
+
+        if (file.type.includes('image')) {
           this.form.patchValue({ image: file });
-        });
-      } else {
-        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
-      }
+          console.log(this.form.controls['image'].value)
+
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            this.form.patchValue({ imageUrl: reader.result });
+          };
+        };
+      });
+    } else {
+      const fileEntry = files[0].fileEntry as FileSystemDirectoryEntry;
+      console.log(files[0].relativePath, fileEntry);
     }
-  }
+    //}
+  };
+
+  // // public getImageUrl(file: NgxFileDropEntry) {
+  
+  // //   let imgUrl: string | ArrayBuffer;
+
+  // //   const fileEntry = file.fileEntry as FileSystemFileEntry;
+  // //   fileEntry.file((file: File) => {
+      
+  // //     const reader = new FileReader();
+  // //     reader.readAsDataURL(file);
+  // //     reader.onload = () => {
+  // //       //this.imageUrlArray = reader.result;
+  // //       //this.imageUrlArray.push(reader.result);
+  // //       //console.log(this.imageUrlArray)
+  // //       imgUrl = reader.result; 
+  // //     };
+  // //   });
+  // //   return imgUrl;
+  // // };
 
   public fileOver(event) {
     console.log(event);

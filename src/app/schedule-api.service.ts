@@ -69,7 +69,8 @@ export const scheduleFactory = (data) => ({
     filename: data.image.name,
     is_album: false,
     url:
-      `https://picsum.photos/id/${Math.floor(Math.random() * 400)}/160/200`,
+      //`https://picsum.photos/id/${Math.floor(Math.random() * 400)}/160/200`,
+      data.imageUrl,
     type: null,
   },
   channel: {
