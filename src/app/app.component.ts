@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
   public schedule() {
     if (!this.form.valid) return; // TODO: give feedback
 
-    console.log('aa')
+    //console.log('aa')
     // send post request
     this.schedules.httpMakeSchedule(this.form.value)
 
@@ -148,7 +148,7 @@ export class AppComponent implements OnInit {
 
         if (file.type.includes('image')) {
           this.form.patchValue({ image: file });
-          console.log(this.form.controls['image'].value)
+          //console.log(this.form.controls['image'].value)
 
           const reader = new FileReader();
           reader.readAsDataURL(file);
@@ -201,6 +201,6 @@ export class AppComponent implements OnInit {
   }
 
   public changeDate($event){
-    this.form.patchValue({ date: $event.target.value });
+    this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
   }
 }
