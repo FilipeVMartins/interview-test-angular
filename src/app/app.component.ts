@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Form, FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import {
   NgxFileDropEntry,
   FileSystemFileEntry,
@@ -10,6 +10,8 @@ import {
 import { Subject, Observable } from 'rxjs';
 import { ChannelsService } from './channels.service';
 import { SchedulesService } from './schedules.service';
+
+import { ToastService, AngularToastifyModule } from 'angular-toastify';
 
 @Component({
   selector: 'app-root',
@@ -33,15 +35,22 @@ export class AppComponent implements OnInit {
   // public dataTeste: any = [];
   // public asdasd: any = 'dddd';
 
+  public day: string='';
+  public hour: string='00:00';
+
   public form: FormGroup;
 
-  public constructor(private http: HttpClient, public channels: ChannelsService, public schedules: SchedulesService) {
+  public formSubmited: boolean=false
+
+  
+
+  public constructor(private http: HttpClient, public channels: ChannelsService, public schedules: SchedulesService, private _toastService: ToastService) {
     this.form = new FormGroup({
       channel: new FormControl(null, Validators.compose([Validators.required])),
       image: new FormControl(null, Validators.compose([Validators.required])),
       imageUrl: new FormControl(null, Validators.compose([Validators.required])),
-      date: new FormControl(null, Validators.compose([Validators.required])),
-      type: new FormControl('feed', Validators.compose([Validators.required]))
+      date: new FormControl(null, Validators.compose([Validators.required, this.minDateValidator])),
+      type: new FormControl(null, Validators.compose([Validators.required]))
     });
 
   };
@@ -54,6 +63,7 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
+    
     //this.form.patchValue({ type: 'feed' });
     // this.http.get('api/channels').subscribe((channels) => {
     //   this.selectedChannel = channels[0];
@@ -104,39 +114,81 @@ export class AppComponent implements OnInit {
     // });
   }
 
-  // public selectChannel(channel) {
-  //   this.channels.setSelectedChannel(channel);
-  //   //this.form.patchValue({ channel });
-  // }
+  addInfoToast(message) {
+    this._toastService.info(message);
+  }
+
+  minDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    //console.log('aafg')
+    if ((Object.prototype.toString.call(control.value) === '[object Date]') && (control.value !== undefined) && (isNaN(control.value) || control.value.getTime() <= new Date().getTime())) {
+      //console.log('teste')
+      return { 'minDate': true };
+    }
+    return null;
+  }
 
   public schedule() {
-    if (!this.form.valid) return; // TODO: give feedback
-
-    //console.log('aa')
     // send post request
-    this.schedules.httpMakeSchedule(this.form.value)
-
-    // this.http.post('api/schedules', this.form.value, { responseType: 'json' }).subscribe((data) => {
-    //     //this.form.reset();, since the UI state keeps itself, the only data that need to be reseted are inputed date and image.
-    //     //this.form.patchValue({ image: null, date: [new Date()] });
-    //     //this.files = [];
-    //     this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
-    //       this.schedulePeriod = {
-    //         start_date: scheduleResponse.start_date,
-    //         end_date: scheduleResponse.end_date,
-    //       };
-    //       this.schedules = scheduleResponse.data;
-    //       //
-    //       //console.log(scheduleResponse)
-    //     });
-    //   });
+    this.schedules.httpMakeSchedule(this.form.value);
   };
 
   public onSubmit ($event){
     $event.preventDefault();
+    this.formSubmited = true;
 
-    this.schedule();
+
+    //console.log(Object.prototype.toString.call(this.form.controls.date.value), this.form.controls.date.value)
+    //console.log('erros', this.form.controls.date)
+
+    // form validation and feedback user messages
+    if (!this.form.valid){
+
+      if (this.form.controls.type.errors?.required){
+        this.addInfoToast('Necessário Selecionar o Tipo do Agendamento!');
+      }
+
+      if (this.form.controls.date.errors?.required){
+        this.addInfoToast('Necessário informar a Data/Hora do Agendamento!');
+      }
+
+      if (this.form.controls.date.errors?.minDate){
+        this.addInfoToast('A Data/Hora do agendamento precisa ser maior que a atual!');
+      }
+
+      if (this.form.controls.image.errors?.required){
+        this.addInfoToast('Necessário Selecionar um Arquivo!');
+      }
+
+      
+
+      
+
+      return
+    } else {
+      this.schedule();
+      this.clearForm();
+      return
+    }
+
+
+
+    //date cannot be empty, date must be higher than actual date/hour
   };
+
+  clearForm(){
+    this.day='';
+    this.hour='00:00';
+    this.form.patchValue({ image: null })
+    this.form.patchValue({ imageUrl: null })
+    this.form.patchValue({ date: null })
+    this.form.patchValue({ type: null });
+
+    // manual clean because timepicker's [defaultTime] property doesn't work like a model.
+    (<NodeListOf<HTMLInputElement>>document.querySelectorAll('input.ngx-timepicker-control__input'))[0].value = '00';
+    (<NodeListOf<HTMLInputElement>>document.querySelectorAll('input.ngx-timepicker-control__input'))[1].value = '00';
+
+    this.formSubmited = false;
+  }
 
   public dropped(files: NgxFileDropEntry[]) {
     //this.files = files;
@@ -155,11 +207,14 @@ export class AppComponent implements OnInit {
           reader.onload = () => {
             this.form.patchValue({ imageUrl: reader.result });
           };
-        };
+        } else {
+          this.addInfoToast('Apenas arquivos de imagem são permitidos!');
+        }
       });
     } else {
       const fileEntry = files[0].fileEntry as FileSystemDirectoryEntry;
       console.log(files[0].relativePath, fileEntry);
+      this.addInfoToast('Não é um arquivo válido!');
     }
     //}
   };
@@ -200,7 +255,20 @@ export class AppComponent implements OnInit {
     //console.log(this.form.controls['type'].value);
   }
 
-  public changeDate($event){
-    this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
+  public changeDate($event, type){
+    console.log($event)
+    if (type == 'day'){
+      this.day = $event.target.value;
+    } else {
+      this.hour = $event;
+    }
+
+    // //console.log($event)
+    // console.log('day',this.day)
+    // console.log('hour',this.hour)
+    // console.log(new Date(`${this.day} ${this.hour}`));
+    //this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
+    this.form.patchValue({ date: new Date(`${this.day} ${this.hour}`) });
+    //console.log(this.form.controls.date.value)
   }
 }

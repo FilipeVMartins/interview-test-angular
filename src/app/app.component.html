@@ -56,7 +56,7 @@
       <button mat-button (click)="onSubmit($event)">Agendar</button>
       <div class="file-drop">
 
-        <div class="schedule-type-wrapper">
+        <div class="schedule-type-wrapper" [ngStyle]="{color:  (formSubmited && this.form.controls.type.errors?.required) ? 'red' : 'black'}">
           <label>Tipo do Agendamento: &nbsp;</label>
           <div class="schedule-type-button-group">
             <button type="button" value="feed" (click)="changeType($event)" [ngClass]="(this.form.controls['type'].value==='feed')?'schedule-type-button':'schedule-type-button schedule-type-button-hover'" [ngStyle]="{'background-color': this.form.controls['type'].value === 'feed' ? 'darkgray' : 'transparent' }" >Novo Post</button>
@@ -64,14 +64,22 @@
           </div>
         </div>
 
-        <div class="schedule-date-wrapper">
-          <label for="inputDate" >Data do Agendamento: &nbsp;</label>
-          <input type="date" (change)="changeDate($event)" name="inputDate" id="inputDate">
+        <div class="schedule-date-wrapper" [ngStyle]="{color:  (formSubmited && (this.form.controls.date.errors?.required || this.form.controls.date.errors?.minDate)) ? 'red' : 'black'}">
+          <div class="schedule-day-wrapper" >
+            <label for="inputDate" >Data do Agendamento: &nbsp;</label>
+            <input type="date" [value]="day" (change)="changeDate($event, 'day')" name="inputDate" id="inputDate">
+          </div>
+
+          <div class="schedule-hour-wrapper">
+            <label >Hora do Agendamento: &nbsp;</label>
+            <ngx-timepicker-field [defaultTime]="hour" (timeChanged)="changeDate($event, 'hour')" [format]="24" ></ngx-timepicker-field>
+          </div>
         </div>
+        
+        <lib-toastify-toast-container></lib-toastify-toast-container>
 
 
-
-        <div>
+        <div [ngStyle]="{color:  (formSubmited && this.form.controls.image.errors?.required) ? 'red' : 'black'}">
           <ngx-file-drop
             dropZoneLabel="Drop files here"
             (onFileDrop)="dropped($event)"
@@ -138,7 +146,7 @@
           <div class="td"><p> {{row.status}}</p></div>
           <div class="td"><img src="{{ row.image.url }}" /></div>
           <div class="td"><p> {{row.channel.username}}</p></div>
-          <div class="td"><p> {{row.date | date: 'dd-MM-yyyy'}}</p></div>
+          <div class="td"><p> {{row.date | date: 'dd-MM-yyyy HH:mm'}}</p></div>
         </div>
       </div>
     </section>

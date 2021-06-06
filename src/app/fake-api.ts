@@ -6,7 +6,7 @@ export const schedules = {
     {
       id: 62512642,
       created_at: '2021-03-30T16:41:14.000000Z',
-      status: 'waiting',
+      status: 'sent',
       now: false,
       date: '2021-03-30T18:40:00+0000',
       caption: 'A nice post',

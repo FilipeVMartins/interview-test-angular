@@ -29,22 +29,18 @@ export class SchedulesService {
   private httpGetSchedules() {
     this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
 
-      
-      this.schedules.next(scheduleResponse.data);
+      this.schedules.next(this.sortSchedulesByDate(scheduleResponse.data));
 
       let schedulePeriod = {
         start_date: scheduleResponse.start_date,
         end_date: scheduleResponse.end_date
       };
       this.schedulePeriod.next(schedulePeriod);
-
-      this.sortSchedulesByDate(scheduleResponse.data);
     });
   };
 
   private sortSchedulesByDate(schedules){
-    console.log('not-sorted',schedules)
-    
+    //console.log('not-sorted',schedules)
     schedules.sort((a,b) => {
       let dateA = new Date(a.date);
       let dateB = new Date(b.date);
@@ -57,8 +53,9 @@ export class SchedulesService {
       } else {
         return 0
       }
-    })
-    console.log('sorted',schedules)
+    });
+    //console.log('sorted',schedules)
+    return schedules;
   };
 
   // send a post request to create a Schedule

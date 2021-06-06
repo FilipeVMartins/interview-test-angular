@@ -14,9 +14,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import { ToastService, AngularToastifyModule } from 'angular-toastify'; 
+
 
 
 import { ChannelsService } from './channels.service';
+import { SchedulesService } from './schedules.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,13 +34,14 @@ import { ChannelsService } from './channels.service';
     BrowserAnimationsModule,
     FlexLayoutModule,
 
-    
+    NgxMaterialTimepickerModule,
+    AngularToastifyModule,
 
     MatTabsModule,
     MatListModule,
     MatTableModule,
   ],
-  providers: [ChannelsService],
+  providers: [ChannelsService, SchedulesService, ToastService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

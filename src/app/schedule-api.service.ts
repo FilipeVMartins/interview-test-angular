@@ -52,7 +52,7 @@ export class ScheduleAPIService implements InMemoryDbService {
 export const scheduleFactory = (data) => ({
   id: Math.floor(Math.random() * 1000),
   created_at: new Date(),
-  status: 'waiting',
+  status: (data.date >= new Date().getTime()) ? 'waiting' : 'sent',
   now: false,
   date: data.date,
   caption: 'Lorem ipsom',
