@@ -53,7 +53,7 @@
 
 
     <section class="scheduler">
-      <button mat-button (click)="onSubmit($event)">Agendar</button>
+      <button mat-button class="submit-schedule-button" (click)="onSubmit($event)">Agendar</button>
       <div class="file-drop">
 
         <div class="schedule-type-wrapper" [ngStyle]="{color:  (formSubmited && this.form.controls.type.errors?.required) ? 'red' : 'black'}">
@@ -67,7 +67,7 @@
         <div class="schedule-date-wrapper" [ngStyle]="{color:  (formSubmited && (this.form.controls.date.errors?.required || this.form.controls.date.errors?.minDate)) ? 'red' : 'black'}">
           <div class="schedule-day-wrapper" >
             <label for="inputDate" >Data do Agendamento: &nbsp;</label>
-            <input type="date" [value]="day" (change)="changeDate($event, 'day')" name="inputDate" id="inputDate">
+            <input class="inputDay" type="date" [value]="day" (change)="changeDate($event, 'day')" name="inputDate" id="inputDate">
           </div>
 
           <div class="schedule-hour-wrapper">
@@ -141,7 +141,7 @@
           <div class="td" *ngFor="let column of displayedColumns" >{{column}}</div>
         </div>
 
-        <div class="tr tbody" *ngFor="let row of schedules.schedules | async" >
+        <div class="tr tbody" *ngFor="let row of schedules.schedules | async" (click)="selectSchedule(row)" >
           <div class="td"><p> {{row.type}}</p></div>
           <div class="td"><p> {{row.status}}</p></div>
           <div class="td"><img src="{{ row.image.url }}" /></div>
@@ -157,4 +157,6 @@
 
   </div>
 </form>
+
+  <app-schedule-modal [selectedSchedule]="selectedSchedule" [display]="selectedScheduleDisplayModal" (printTeste)="printTeste(stringteste)" (displayNoneParent)="closeSelectedScheduleModal()"></app-schedule-modal>
 </div>

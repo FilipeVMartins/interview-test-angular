@@ -66,6 +66,22 @@ export class SchedulesService {
     });
   }
 
+  // send a post request to create a Schedule
+  public httpDeleteSchedule(scheduleID) {
+    this.http.post('api/schedules', {action: 'delete', id: scheduleID}, { responseType: 'json' }).subscribe((data) => {
+      // update Schedules
+      this.httpGetSchedules();
+    });
+  }
+
+  // send a post request to update a Schedule
+  public httpUpdateSchedule(schedule) {
+    this.http.post('api/schedules', {action: 'update', schedule: schedule}, { responseType: 'json' }).subscribe((data) => {
+      // update Schedules
+      this.httpGetSchedules();
+    });
+  }
+
 
 
 

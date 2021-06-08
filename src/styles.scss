@@ -29,6 +29,13 @@ body { cursor: default; margin: 0; font-family: Roboto, "Helvetica Neue", sans-s
 .main-page .input-file-button {
     appearance: auto;
     cursor: pointer;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+    padding: 0.3rem 1rem;
+}
+
+.main-page .input-file-button:hover {
+    background-color: #d3d3d3;
 }
 
 //ngx-timepicker-field

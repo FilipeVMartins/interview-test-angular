@@ -21,9 +21,10 @@ import { ToastService, AngularToastifyModule } from 'angular-toastify';
 
 import { ChannelsService } from './channels.service';
 import { SchedulesService } from './schedules.service';
+import { ScheduleModalComponent } from './schedule-modal/schedule-modal.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ScheduleModalComponent],
   imports: [
     BrowserModule,
     FormsModule,

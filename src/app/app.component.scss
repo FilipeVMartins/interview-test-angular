@@ -80,6 +80,29 @@
 
 
 
+section.scheduler{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  border-top: 1px solid black;
+}
+
+section.scheduler button.submit-schedule-button {
+  width: 20rem;
+  align-self: center;
+  max-width: 100%;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  border-top: none;
+}
+
+section.scheduler button.submit-schedule-button:hover {
+  background-color: #d3d3d3;
+}
+
 .schedule-type-wrapper {
   display: flex;
   flex-direction: row;
@@ -128,10 +151,18 @@
   margin-right: 1rem;
 }
 
+.schedule-date-wrapper .inputDay {
+  border: 1px solid black;
+}
 
 
 .schedules-history {
   margin-top: 3rem;
+}
+
+.upload-name-style {
+  display: flex;
+  justify-content: center;
 }
 
 .upload-table .upload-name-style img {
@@ -194,6 +225,15 @@
 
 .table .td img {
   width: 2.5rem;
+}
+
+section.schedules-history div.table div.tr {
+  padding-left: 0.5rem;
+}
+
+section.schedules-history div.table div.tr.tbody:hover {
+  background-color: #edf0f1;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 700px) {

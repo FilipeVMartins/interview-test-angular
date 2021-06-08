@@ -1,0 +1,18 @@
+<div class="app-schedule-modal" [ngStyle]="{'display': display ? 'block' : 'none' }" [style.height]="getContentHeight()">
+    <div class="screen-block" (click)="closeSelectedScheduleModal()" ></div>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="modal-header">
+                <div (click)="printTesteInChild()">Schedule ID: {{selectedSchedule?.id}}</div>
+
+                <div class="actions">
+                    <button type="button" (click)="updateSelectedSchedule()">Enviar Agora</button>
+                    <button type="button" (click)="deleteSelectedSchedule()">Excluir</button>
+                    <button type="button" (click)="closeSelectedScheduleModal()">Cancelar</button>
+                </div>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

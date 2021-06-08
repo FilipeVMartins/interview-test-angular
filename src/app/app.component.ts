@@ -40,8 +40,12 @@ export class AppComponent implements OnInit {
 
   public form: FormGroup;
 
-  public formSubmited: boolean=false
+  public formSubmited: boolean = false;
 
+  public stringteste: string = 'string teste asdasdasd';
+
+  public selectedSchedule: any;
+  public selectedScheduleDisplayModal: boolean = false;
   
 
   public constructor(private http: HttpClient, public channels: ChannelsService, public schedules: SchedulesService, private _toastService: ToastService) {
@@ -63,6 +67,8 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit() {
+
+    
     
     //this.form.patchValue({ type: 'feed' });
     // this.http.get('api/channels').subscribe((channels) => {
@@ -270,5 +276,22 @@ export class AppComponent implements OnInit {
     //this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
     this.form.patchValue({ date: new Date(`${this.day} ${this.hour}`) });
     //console.log(this.form.controls.date.value)
+  }
+
+  public selectSchedule(selectedSchedule){
+    console.log(selectedSchedule)
+    this.selectedSchedule = selectedSchedule;
+    this.selectedScheduleDisplayModal = true ;
+  }
+
+  public closeSelectedScheduleModal (){
+    this.selectedSchedule = null;
+    this.selectedScheduleDisplayModal = false ;
+  }
+
+
+  //test only
+  public printTeste(varr){
+    console.log(varr)
   }
 }
