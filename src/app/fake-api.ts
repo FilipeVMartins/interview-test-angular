@@ -1,7 +1,7 @@
 export const schedules = {
   status: 'success',
   start_date: '2021-02-28T03:00:00+0000',
-  end_date: '2021-03-31T02:59:59+0000',
+  end_date: '2022-12-31T02:59:59+0000',
   data: [
     {
       id: 62512642,

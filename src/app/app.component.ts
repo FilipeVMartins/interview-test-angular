@@ -59,36 +59,11 @@ export class AppComponent implements OnInit {
 
   };
   
-  //debug
-  public log(val) { console.log(val); }
-
   public trackItem (index: number, item: any) {
     return item.trackId;
   }
 
   public ngOnInit() {
-
-    
-    
-    //this.form.patchValue({ type: 'feed' });
-    // this.http.get('api/channels').subscribe((channels) => {
-    //   this.selectedChannel = channels[0];
-    //   this.channels = channels;
-    //   this.form.patchValue({ channel: channels[0] });
-    // });
-
-
-    //console.log(this.channels.channels)
-
-    
-    // this.channels.channelsObs.subscribe((channels) => {
-    //   console.log(channels);
-    //   this.dataTeste = channels;
-      
-    //   console.log(this.dataTeste);
-
-    // })
-
 
     // subscribe to keep form channel value always updated with the service selectedChannel
     this.channels.selectedChannelObs.subscribe((channel) => {
@@ -96,36 +71,17 @@ export class AppComponent implements OnInit {
       this.form.patchValue({ channel: channel });
     })
 
-    this.schedules.schedulePeriodObs.subscribe((schedules) => {
-      console.log(schedules);
-    })
-
-
-
-    
-
-
-
-
-    
-    
-
-    // this.http.get('api/schedules').subscribe((scheduleResponse: any) => {
-    //   this.schedulePeriod = {
-    //     start_date: scheduleResponse.start_date,
-    //     end_date: scheduleResponse.end_date,
-    //   };
-    //   this.schedules = scheduleResponse.data;
-    //   //console.log(this.schedules)
-    // });
   }
 
+  // function just to avoid the syntax of the service function call
   addInfoToast(message) {
+    // function to send the user messages to the _toastService component to be displayed
     this._toastService.info(message);
   }
 
+  // function to validade the prevent of schedules being made before the actual time date/hour.
   minDateValidator(control: AbstractControl): { [key: string]: boolean } | null {
-    //console.log('aafg')
+    // it also checks if the date is a valid one to be validated
     if ((Object.prototype.toString.call(control.value) === '[object Date]') && (control.value !== undefined) && (isNaN(control.value) || control.value.getTime() <= new Date().getTime())) {
       //console.log('teste')
       return { 'minDate': true };
@@ -134,7 +90,7 @@ export class AppComponent implements OnInit {
   }
 
   public schedule() {
-    // send post request
+    // schedules service function to create a new schedule, send a post request
     this.schedules.httpMakeSchedule(this.form.value);
   };
 

@@ -37,16 +37,16 @@ export class ScheduleModalComponent implements OnInit {
     this.displayNoneParent.emit();
   }
 
-  // delete
+  // delete schedule by sending its id to the service delete request method
   public deleteSelectedSchedule() {
     this.schedules.httpDeleteSchedule(this.selectedSchedule.id);
     this.closeSelectedScheduleModal();
   }
 
-  // edit
+  // update the status and sent date/hour of a schedule by sending its whole data row to the service delete request method
   public updateSelectedSchedule (){
 
-    // change Schedule data
+    // change Schedule data if it's still waiting
     if(this.selectedSchedule.status == 'waiting'){
 
       this.selectedSchedule.status = 'sent'
@@ -54,14 +54,14 @@ export class ScheduleModalComponent implements OnInit {
       this.schedules.httpUpdateSchedule(this.selectedSchedule);
 
     } else {
-      //notify user
+      //notify user the schedule has been alrdy sent
       this._toastService.info('Esse post já foi enviado!');
     }
     
     this.closeSelectedScheduleModal();
   }
 
-  // define the height of the modal element
+  // define the height of the modal element, it's importante to block the whole content height and prevent user from interacting with other elements
   public getContentHeight() {
     let body = document.body;
     let html = document.documentElement;
