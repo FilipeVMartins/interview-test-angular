@@ -98,45 +98,42 @@ export class AppComponent implements OnInit {
     $event.preventDefault();
     this.formSubmited = true;
 
-
     //console.log(Object.prototype.toString.call(this.form.controls.date.value), this.form.controls.date.value)
     //console.log('erros', this.form.controls.date)
 
     // form validation and feedback user messages
     if (!this.form.valid){
 
+      // type cannot be empty
       if (this.form.controls.type.errors?.required){
         this.addInfoToast('Necessário Selecionar o Tipo do Agendamento!');
       }
 
+      // date cannot be empty
       if (this.form.controls.date.errors?.required){
         this.addInfoToast('Necessário informar a Data/Hora do Agendamento!');
       }
 
+      // date must be higher than actual date/hour
       if (this.form.controls.date.errors?.minDate){
         this.addInfoToast('A Data/Hora do agendamento precisa ser maior que a atual!');
       }
 
+      // image cannot be empty
       if (this.form.controls.image.errors?.required){
         this.addInfoToast('Necessário Selecionar um Arquivo!');
       }
 
-      
-
-      
-
       return
     } else {
+      // if form is valid, then submit it
       this.schedule();
       this.clearForm();
       return
     }
-
-
-
-    //date cannot be empty, date must be higher than actual date/hour
   };
 
+  // function to clear the form after the submit event
   clearForm(){
     this.day='';
     this.hour='00:00';
@@ -153,7 +150,6 @@ export class AppComponent implements OnInit {
   }
 
   public dropped(files: NgxFileDropEntry[]) {
-    //this.files = files;
 
     //for (const droppedFile of files) {
     if (files[0].fileEntry.isFile) {
@@ -208,15 +204,14 @@ export class AppComponent implements OnInit {
     console.log(event);
   }
 
+  // function to change type field from form
   public changeType($event) {
-
-    //console.log($event.target.value)
-    
     //this.form.patchValue({ type: $event.index === 0 ? 'feed' : 'story' });
+
     this.form.patchValue({ type: $event.target.value });
-    //console.log(this.form.controls['type'].value);
   }
 
+  // function to change date field from form
   public changeDate($event, type){
     console.log($event)
     if (type == 'day'){
@@ -224,24 +219,26 @@ export class AppComponent implements OnInit {
     } else {
       this.hour = $event;
     }
-
-    // //console.log($event)
-    // console.log('day',this.day)
-    // console.log('hour',this.hour)
+    // way to prevent the bug of one day less: this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
     // console.log(new Date(`${this.day} ${this.hour}`));
-    //this.form.patchValue({ date: new Date($event.target.value.replace('-','/')) });
+
     this.form.patchValue({ date: new Date(`${this.day} ${this.hour}`) });
-    //console.log(this.form.controls.date.value)
   }
 
+  // function to call the Schedule modal, wich can delete/update a schedule
   public selectSchedule(selectedSchedule){
     console.log(selectedSchedule)
+    // sets the schedule data to the modal
     this.selectedSchedule = selectedSchedule;
+    // sets visibility
     this.selectedScheduleDisplayModal = true ;
   }
 
+  // function to close the schedule modal
   public closeSelectedScheduleModal (){
+    // empty the data from previous selected schedule
     this.selectedSchedule = null;
+    // sets visibility
     this.selectedScheduleDisplayModal = false ;
   }
 

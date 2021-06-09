@@ -43,8 +43,6 @@ export class ScheduleAPIService implements InMemoryDbService {
       return this.updateSchedule(reqInfo, body);
     }
 
-
-
     return undefined;
   }
 
@@ -84,7 +82,6 @@ export class ScheduleAPIService implements InMemoryDbService {
     return reqInfo.utils.createResponse$(() => options);
   }
 
-  // body (form) of this should contain id 
   private updateSchedule(reqInfo, body) { 
     console.log({ body });
 
